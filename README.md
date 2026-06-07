@@ -10,48 +10,37 @@ Este proyecto simula una validación de identidad con una salida mínima y deter
 
 ## Estructura
 
-- `function_app.py`: entrada HTTP de Azure Functions.
-- `identity_service.py`: reglas puras y catálogo sintético.
-- `synthetic_registry.json`: catálogo con `cedula`, nombre y apellido.
-- `generate_synthetic_registry.py`: generador reproducible del catálogo.
-- `extracted_names.json`: listado base local.
-- `tests/`: pruebas unitarias.
+Ver [ESTRUCTURA](ESTRUCTURA.md) para la documentación completa de carpetas y organización del proyecto.
 
-## Cómo probar en local
+**Componentes principales:**
 
-1. Crea y activa un entorno virtual.
-2. Instala dependencias de runtime y pruebas.
-3. Ejecuta `pytest`.
+- `src/function_app.py`: Endpoint HTTP de Azure Functions
+- `src/identity_service.py`: Lógica pura de validación
+- `src/generate_synthetic_registry.py`: Generador de catálogo sintético
+- `data/synthetic_registry.json`: Catálogo con cédula, nombre y apellido
+- `data-sources/extracted_names.json`: Listado base de datos
+- `tests/test_identity_service.py`: Pruebas unitarias
 
-Ejemplo:
+## API - Contrato de Datos
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt -r requirements-dev.txt
-pytest
-```
+La API recibe una cédula sintética de 10 dígitos y responde con:
+- `1` = cédula válida (existe en registro)
+- `0` = cédula inválida (no existe en registro)
 
-## Ejecutar Azure Functions en local
+**Endpoints disponibles:**
 
-Necesitas Azure Functions Core Tools instalado. Luego:
+- `GET /api/validar?cedula=9900000001`
+- `POST /api/validar` con body `{ "cedula": "9900000001" }`
 
-1. Copia [local.settings.json.example](local.settings.json.example) a `local.settings.json`.
-2. Verifica que `FUNCTIONS_WORKER_RUNTIME` quede en `python`.
-3. Ejecuta `func start`.
+## Despliegue en Azure
 
-La ruta disponible es:
+El proyecto está diseñado para ejecutarse como **Azure Function Python** con:
+- Autenticación: Anónima
+- Runtime: Python 3.x
+- Trigger: HTTP
+- Dependencias: Azure Functions SDK + librerías estándar
 
-- `GET /api/validar?cedula=...`
-- `POST /api/validar` con `{ "cedula": "..." }`
-
-## Contrato mínimo
-
-La API recibe una cédula sintética de 10 dígitos y responde solo con `1` o `0`.
-
-## Azure
-
-Para desplegar, el proyecto está pensado como Azure Function Python con autenticación anónima. La lógica de negocio está separada del handler para facilitar pruebas, mantenimiento y trazabilidad bajo una metodología XP.
+La separación entre lógica de negocio (`identity_service.py`) y handler HTTP (`function_app.py`) facilita pruebas, mantenimiento y trazabilidad.
 
 ## Notas de diseño
 

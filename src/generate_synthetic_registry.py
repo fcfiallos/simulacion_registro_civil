@@ -8,7 +8,7 @@ import json
 from identity_service import build_synthetic_registry, load_people
 
 
-OUTPUT_FILE = Path(__file__).with_name("synthetic_registry.json")
+OUTPUT_FILE = Path(__file__).parent.parent / "data" / "synthetic_registry.json"
 
 
 def main() -> None:

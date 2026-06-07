@@ -1,4 +1,8 @@
 from pathlib import Path
+import sys
+
+# Agregar el directorio src al path para poder importar identity_service
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from identity_service import (
     build_synthetic_cedulas,
