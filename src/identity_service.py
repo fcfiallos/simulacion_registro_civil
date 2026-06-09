@@ -16,7 +16,7 @@ DEFAULT_REGISTRY_FILE = Path(__file__).parent.parent / "data" / "synthetic_regis
 CEDULA_PREFIX = "99"
 CEDULA_LENGTH = 10
 
-
+# Funciones para generación cédulas sintéticas.
 def load_people(file_path: Path | None = None) -> list[dict[str, str]]:
     """Carga el catálogo local de nombres y apellidos.
 
@@ -49,7 +49,7 @@ def build_synthetic_registry(people: list[dict[str, str]]) -> list[dict[str, str
         for index, person in enumerate(people, start=1)
     ]
 
-
+# Funciones para validación de cédulas sintéticas.
 def load_registry(file_path: Path | None = None) -> list[dict[str, str]]:
     """Carga el catálogo sintético si existe; si no, lo deriva del listado base."""
 
@@ -87,6 +87,35 @@ def exists_in_registry(cedula: str, valid_cedulas: set[str]) -> bool:
 
     return is_valid_cedula_format(cedula) and cedula in valid_cedulas
 
+# Funciones para validación extendida con nombre completo.
+def normalize_text(value: str | None) -> str:
+    """Normaliza el texto para comparación exacta en mayúsculas."""
+    return (value or "").strip().upper()
+
+
+def find_person_by_cedula(cedula: str, registry: list[dict[str, str]]) -> dict[str, str] | None:
+    """Busca el registro de una persona por cédula."""
+    return next((person for person in registry if person["cedula"] == cedula), None)
+
+
+def matches_full_name(
+    cedula: str,
+    name: str,
+    surname: str,
+    registry: list[dict[str, str]],
+) -> bool:
+    """Compara cédula, nombre completo y apellido completo contra el registro."""
+    if not is_valid_cedula_format(cedula):
+        return False
+
+    person = find_person_by_cedula(cedula, registry)
+    if person is None:
+        return False
+
+    return (
+        normalize_text(person["name"]) == normalize_text(name)
+        and normalize_text(person["surname"]) == normalize_text(surname)
+    )
 
 SYNTHETIC_REGISTRY = load_registry()
 VALID_CEDULAS = build_valid_cedulas(SYNTHETIC_REGISTRY)
