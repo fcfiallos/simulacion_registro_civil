@@ -23,7 +23,7 @@ def _extract_cedula(req: func.HttpRequest) -> str:
 
 
 @app.route(route="validar", methods=["GET", "POST"])
-def validar(req: func.HttpRequest) -> func.HttpResponse:
+def validar_cedula(req: func.HttpRequest) -> func.HttpResponse:
     """Devuelve 1 si la cédula sintética existe, 0 en caso contrario."""
 
     cedula = _extract_cedula(req)
@@ -45,7 +45,7 @@ def _extract_person_data(req: func.HttpRequest) -> tuple[str, str, str]:
 
 
 @app.route(route="validar-persona", methods=["GET", "POST"])
-def validar(req: func.HttpRequest) -> func.HttpResponse:
+def validar_persona(req: func.HttpRequest) -> func.HttpResponse:
     cedula, name, surname = _extract_person_data(req)
 
     result = "1" if matches_full_name(cedula, name, surname, SYNTHETIC_REGISTRY) else "0"

@@ -11,8 +11,8 @@ import json
 
 
 # Rutas relativas al directorio src
-DEFAULT_DATA_FILE = Path(__file__).parent.parent / "data-sources" / "extracted_names.json"
-DEFAULT_REGISTRY_FILE = Path(__file__).parent.parent / "data" / "synthetic_registry.json"
+DEFAULT_DATA_FILE = Path(__file__).parent / "data-sources" / "extracted_names.json"
+DEFAULT_REGISTRY_FILE = Path(__file__).parent / "data" / "synthetic_registry.json"
 CEDULA_PREFIX = "99"
 CEDULA_LENGTH = 10
 

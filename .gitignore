@@ -23,9 +23,10 @@ obj/
 bin/
 
 # IDEs
-.vscode/
+
 .idea/
 *.swp
 
 # OS
 .DS_Store
+.python_packages

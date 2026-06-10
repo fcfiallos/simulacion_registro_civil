@@ -21,18 +21,22 @@ https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
+
 2. Instalar Dependencias
 ```powershell
 pip install -r requirements.txt -r requirements-dev.txt
 ```
+
 3. Ejecutar pruebas unitarias
 ```powershell
 pytest
 ```
+
 4. Ejecutar Azure Functions local
 ```powershell
-func start --script-root src --verbose
+func start --script-root src --python --verbose
 ```
+
 5. Pruebas de EndPoint local
 ***GET***  
 ```
